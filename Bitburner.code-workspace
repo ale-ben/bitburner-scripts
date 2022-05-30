@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"bitburner.authToken": "KLkRJhX3HaxN8Vo8hkxFJedBvxha6v1nnOcABhGi1S3BT+NPEAvg5XPfQ8mrw9pN",
+		"bitburner.fileWatcher.enable": true,
+		"bitburner.showFileWatcherEnabledNotification": true,
+		"bitburner.showPushSuccessNotification": true,
+		"bitburner.scriptRoot": "./sync"
+	}
+}
