@@ -1,12 +1,5 @@
 async function attack(ns) {
-	const fileList = ["/bin/attackNeighbours.js", "/bin/propagateToNeighbours.js", "/bin/farmLocalhost.js", "/bin/launchFarm.js", ];
-	await ns.scp(fileList, "nectar-net");
-	ns.run("/bin/propagateToNeighbours.js");
-	await ns.exec("/bin/propagateToNeighbours.js", "nectar-net");
-	await ns.sleep(1000*5);
-	ns.run("/bin/launchFarm.js");
-	await ns.exec("/bin/farmLocalhost.js", "n00dles", 1, "n00dles");
-	await ns.exec("/bin/launchFarm.js", "nectar-net");
+	ns.run("/bin/centralizedAttack.js");
 }
 
 async function manageNodes(ns) {
