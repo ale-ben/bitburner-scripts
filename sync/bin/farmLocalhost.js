@@ -1,14 +1,20 @@
 export async function main(ns) {
+
+	ns.disableLog("getServerSecurityLevel");
+	ns.disableLog("getServerMinSecurityLevel");
+	ns.disableLog("getServerMaxMoney");
+	ns.disableLog("getServerMoneyAvailable");
+
 	const localhost = ns.args[0];
-	
-	ns.print("Launching farm on " + hostname)
+
+	ns.print("Launching farm on " + localhost)
 	while (true) {
-		if (ns.getServerSecurityLevel(hostname) > ns.getServerMinSecurityLevel(hostname)) {
-			await ns.weaken(hostname);
-		} else if (ns.getServerMoneyAvailable(hostname) < ns.getServerMaxMoney(hostname)) {
-			await ns.grow(hostname);
+		if (ns.getServerSecurityLevel(localhost) > ns.getServerMinSecurityLevel(localhost)) {
+			await ns.weaken(localhost);
+		} else if (ns.getServerMoneyAvailable(localhost) < ns.getServerMaxMoney(localhost)) {
+			await ns.grow(localhost);
 		} else {
-			await ns.hack(hostname);
+			await ns.hack(localhost);
 		}
-	}	
+	}
 }
