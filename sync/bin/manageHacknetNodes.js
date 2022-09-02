@@ -6,15 +6,15 @@ export async function main(ns) {
 	var config = {
 		"nodes": 9,
 		"level": {
-			"req": 100,
+			"req": 50,
 			"block": 5
 		},
 		"ram": {
-			"req": 32,
+			"req": 16,
 			"block": 1
 		},
 		"cores": {
-			"req": 16,
+			"req": 8,
 			"block": 1
 		}
 	}

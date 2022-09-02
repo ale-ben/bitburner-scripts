@@ -55,6 +55,8 @@ export async function main(ns) {
 	ns.disableLog("getServerMaxMoney");
 	ns.disableLog("getServerMoneyAvailable");
 
+	serverStats = [];
+
 	visit(ns, "home", "home");
 
 	serverStats.sort((a, b) => b.score - a.score);

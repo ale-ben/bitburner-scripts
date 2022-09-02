@@ -1,9 +1,13 @@
 async function attack(ns) {
-	ns.run("/bin/centralizedAttack.js");
+	ns.run("/bin/centralizedAttack.js");//TODO: Launch harvest if new nodes
 }
 
 async function manageNodes(ns) {
 	ns.run("/bin/manageHacknetNodes.js");
+}
+
+async function harvest(ns){
+	ns.run("/bin/centralizedLaunchHarvest.js", 1,  "n00dles");
 }
 
 export async function main(ns) {
@@ -24,6 +28,11 @@ export async function main(ns) {
 			name: "manageNodes",
 			func: manageNodes,
 			interval: 5 // in minutes
+		},
+		{
+			name: "harvest",
+			func: harvest,
+			interval: 10 // in minutes
 		}
 	]
 
