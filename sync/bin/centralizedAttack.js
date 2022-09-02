@@ -42,7 +42,7 @@ async function attack(ns, host) {
 	if (levelActual >= levelNeeded) {
 		ns.print("Hacking level requirement met to hack " + host);
 		const portsNeeded = ns.getServerNumPortsRequired(host);
-		if (portsNeeded <= 3) { // Add new attacks
+		if (portsNeeded <= 1) { // Add new attacks
 			if (portsNeeded >= 1) {
 				await ns.brutessh(host);
 				ns.print("SSH port opened on host " + host);

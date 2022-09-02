@@ -35,14 +35,9 @@ async function harvest(ns, host) {
 	ns.print("Starting Harvest on " + host);
 	await ns.scp(fileList, host);
 	const maxRam = ns.getServerMaxRam(host)-scriptSize;
-	const minSecLev = ns.getServerMinSecurityLevel(host);
-	const maxGrow = ns.getServerMaxMoney(host);
-	const weakenTime = ns.getWeakenTime(host);
-	const hackTime = ns.getHackTime(host);
+	const minSecLev = ns.getServerMinSecurityLevel(target); // TODO: Convertire in un obj da passare come arg
+	const maxGrow = ns.getServerMaxMoney(target);
 
-	if (ns.isRunning(scriptName,host, host, maxRam, minSecLev, maxGrow, weakenTime, hackTime, target)) {
-		ns.print("Killing script in " + host);
-		ns.kill(scriptName,host, host, maxRam, minSecLev, maxGrow, weakenTime, hackTime, target);
-	}
-	ns.exec(scriptName,host, 1, host, maxRam, minSecLev, maxGrow, weakenTime, hackTime, target);
+	ns.killall(host, false);
+	ns.exec(scriptName,host, 1, host, maxRam, minSecLev, maxGrow, target);
 }
