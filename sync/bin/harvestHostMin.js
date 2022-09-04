@@ -21,7 +21,7 @@ export async function main(ns) {
 	const weakenScript = "/bin/core/weaken.js";
 	const hackScript = "/bin/core/hack.js";
 	const nThreads = Math.floor(maxRam / 1.75);
-	const hackThreads = Math.floor(maxRam / 1.75);
+	const hackThreads = Math.floor(maxRam / 1.7);
 
 	ns.print("Launching farm on " + target)
 
