@@ -3,8 +3,10 @@ function scoreServer(stats) {
 		"sec": -0.001,
 		"grow": 0.000001,
 		"secTime": -0.003,
-		"hackTime": -0.003,
-		"growth": 0.005,
+		"hackTime": -0.003, //TODO: Normalizzare tutti i valori
+		"growth": 0.005, //TODO: Aggiungere soldiTotali/soldiPerHack
+		"moneyPerSecFullCycle" : 0.8,
+		"threadsPerFullHack" : 0.75,
 	};
 	stats.score = 0
 
@@ -25,8 +27,13 @@ function analyzeServer(ns, host) {
 		"growTime": ns.getGrowTime(host),
 		"hackTime": ns.getHackTime(host),
 		"growth": ns.getServerGrowth(host),
+		"gainPercent": ns.hackAnalyze(host),
 		"requiredLevel": ns.getServerRequiredHackingLevel(host)
 	};
+	stats.moneyPerHack = stats.grow * stats.gainPercent;
+	stats.moneyPerSec = stats.moneyPerHack / (stats.hackTime / 1000);
+	stats.moneyPerSecFullCycle = stats.moneyPerHack / (Math.max(stats.secTime, stats.hackTime, stats.growTime) / 1000);
+	stats.threadsPerFullHack = 1/stats.moneyPerHack;
 	return scoreServer(stats);
 }
 
@@ -59,7 +66,7 @@ export async function main(ns) {
 
 	visit(ns, "home", "home");
 
-	serverStats.sort((a, b) => b.score - a.score);
+	serverStats.sort((a, b) => b.moneyPerSecFullCycle - a.moneyPerSecFullCycle);
 	ns.tprint(serverStats);
 	ns.write(outFile, JSON.stringify(serverStats), "w");
 }
