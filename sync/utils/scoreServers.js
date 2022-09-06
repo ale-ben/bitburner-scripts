@@ -33,7 +33,7 @@ function analyzeServer(ns, host) {
 	stats.moneyPerHack = stats.grow * stats.gainPercent;
 	stats.moneyPerSec = stats.moneyPerHack / (stats.hackTime / 1000);
 	stats.moneyPerSecFullCycle = stats.moneyPerHack / (Math.max(stats.secTime, stats.hackTime, stats.growTime) / 1000);
-	stats.threadsPerFullHack = 1/stats.moneyPerHack;
+	stats.threadsPerFullHack = 1/stats.gainPercent;
 	return scoreServer(stats);
 }
 
