@@ -10,6 +10,10 @@ async function harvest(ns){
 	ns.run("/bin/centralizedLaunchHarvest.js", 1,  "foodnstuff");
 }
 
+async function manageServers(ns){
+	ns.run("/bin/manageServers.js");
+}
+
 export async function main(ns) {
 
 
@@ -36,7 +40,13 @@ export async function main(ns) {
 			func: harvest,
 			status: false,
 			interval: 10 // in minutes
-		}
+		},
+		{
+			name: "manageServers",
+			func: manageServers,
+			status: true,
+			interval: 5 // in minutes
+		},
 	]
 
 	var counter = 0;
