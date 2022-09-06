@@ -1,5 +1,7 @@
 
 const serverBlacklist = ["home"];
+var availHacks = 0;
+
 export async function main(ns) {
 
 	
@@ -15,6 +17,13 @@ export async function main(ns) {
 	ns.disableLog("nuke");
 	ns.disableLog("fileExists");
 	ns.disableLog("scp");
+
+	availHacks = 0;
+	if (ns.fileExists("brutessh.exe")) availHacks++;
+	if (ns.fileExists("ftpcrack.exe")) availHacks++;
+	if (ns.fileExists("relaysmtp.exe")) availHacks++;
+	if (ns.fileExists("httpworm.exe")) availHacks++;
+	if (ns.fileExists("sqlinject.exe")) availHacks++;
 
 	await visit(ns, "home", "home");
 }
@@ -42,7 +51,7 @@ async function attack(ns, host) {
 	if (levelActual >= levelNeeded) {
 		ns.print("Hacking level requirement met to hack " + host);
 		const portsNeeded = ns.getServerNumPortsRequired(host);
-		if (portsNeeded <= 1) { // Add new attacks
+		if (portsNeeded <= availHacks) {
 			if (portsNeeded >= 1) {
 				await ns.brutessh(host);
 				ns.print("SSH port opened on host " + host);
@@ -53,6 +62,14 @@ async function attack(ns, host) {
 			}
 			if (portsNeeded >= 3) {
 				await ns.relaysmtp(host);
+				ns.print("SMTP port opened on host " + host);
+			}
+			if (portsNeeded >= 4) {
+				await ns.httpworm(host);
+				ns.print("SMTP port opened on host " + host);
+			}
+			if (portsNeeded >= 5) {
+				await ns.sqlinject(host);
 				ns.print("SMTP port opened on host " + host);
 			}
 			do {
