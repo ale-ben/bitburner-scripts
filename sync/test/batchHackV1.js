@@ -9,13 +9,16 @@ export async function main(ns) {
 	const hackScript = "/bin/core/delayHack.js";
 
 	const ramUsePerThread = ns.getScriptRam(weakenScript);
-	const weakenPerThread = ns.weakenAnalyze(1, 1); // How much does a weaken decrease security by?
 	const sleepPerIteration = 20; // ms - reduce if you need to go even faster, or raise if you get lag spikes
 	const iterationPause = 1 // seconds - Pause after the script did touch every server and every target - how often should it run again
+	const updateFiles = false; // forces the system to update the target files before running
 
 	var randomArgument = 0; // This is a random argument that is passed to the scripts, so that they don't interfere with each other
 
 	while (true) {
+
+
+		let weakenPerThread = ns.weakenAnalyze(1, 1); // How much does a weaken decrease security by? Should be re evaluated every time, as it can change due to level up
 
 		let targets = ["foodnstuff","n00dles", "sigma-cosmetics","joesguns","hong-fang-tea","harakiri-sushi","iron-gym","darkweb","home","zer0","CSEC","nectar-net","max-hardware","neo-net","silver-helix","phantasy","omega-net","computek","netlink","johnson-ortho","the-hub","crush-fitness","avmnite-02h","catalyst","I.I.I.I","summit-uni","syscore","rothman-uni","zb-institute","lexo-corp","rho-construction","millenium-fitness","alpha-ent","aevum-police","aerocorp","snap-fitness","galactic-cyber","global-pharm","omnia","deltaone","unitalife","solaris","defcomm","icarus","univ-energy","zeus-med","taiyang-digital","zb-def","infocomm","nova-med","titan-labs","applied-energetics","microdyne","run4theh111z","stormtech","helios","vitalife","fulcrumtech","4sigma","kuai-gong",".","omnitek","b-and-a","powerhouse-fitness","nwo","clarkinc","blade","ecorp","megacorp","fulcrumassets","The-Cave"]; //TODO: Replace with load from file
 		const targetLimit = 2;
@@ -32,7 +35,10 @@ export async function main(ns) {
 		for (let target of targets) {
 
 			// Check if the target is valid
-			if (!ns.serverExists(target) || !ns.hasRootAccess(target) || ns.getServerMaxMoney(target) < 1) continue;
+			if (!ns.serverExists(target) || !ns.hasRootAccess(target) || ns.getServerMaxMoney(target) < 1) {
+				ns.tprint("Skipping invalid target: " + target + ". Server exists: " + ns.serverExists(target) + ", has root access: " + ns.hasRootAccess(target) + ", has max money: " + (ns.getServerMaxMoney(target) > 0));
+				continue;
+			}
 
 			//Target variables
 			const maxMoney = ns.getServerMaxMoney(target);
@@ -47,19 +53,21 @@ export async function main(ns) {
 			for (let server of servers) {
 
 				// Check if the server is valid
-				if (!ns.serverExists(server) || !ns.hasRootAccess(server)) continue;
+				if (!ns.serverExists(server) || !ns.hasRootAccess(server)) {
+					ns.tprint("Skipping invalid server: " + server + ". Server exists: " + ns.serverExists(server) + ", has root access: " + ns.hasRootAccess(server));
+					continue
+				};
 
 				// Estimate available threads on the server //TODO: Optimize splitting hack and weaken/grow threads  (Hack uses .5 GB less than weaken)
 				let threadsToUse = Math.floor((ns.getServerMaxRam(server) - ns.getServerUsedRam(server)) / ramUsePerThread);
 
 				// If the server is busy, ignore it
-				if (threadsToUse < 1)
-					continue;
+				if (threadsToUse < 1) continue;
 
 				// ----------------- PREP -----------------
 
 				// Check if files exist, if not, upload them
-				if (!ns.fileExists(weakenScript, server)) {
+				if (!ns.fileExists(weakenScript, server) || updateFiles) {
 					ns.print("Setting up files on " + server);
 					await ns.scp([weakenScript, growScript, hackScript], server, "home");
 				}
@@ -174,6 +182,7 @@ export async function main(ns) {
 			}
 			await ns.sleep(sleepPerIteration);
 		}
+		if (updateFiles) updateFiles = false;
 		await ns.sleep(1000 * iterationPause);
 	}
 }

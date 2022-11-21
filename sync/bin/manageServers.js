@@ -26,7 +26,7 @@ export async function main(ns) {
 			ns.print("INFO: Buying new server " + hostname);
 			servers.push(hostname);
 		} else {
-			ns.print("DEBUG: Not enough money to buy a new server");
+			ns.print("DEBUG: Not enough money to buy a new server. Required: " + ns.getPurchasedServerCost(Math.pow(2, minRamExp)));
 			break;
 		}
 	}
@@ -46,7 +46,7 @@ export async function main(ns) {
 				ns.print("INFO: Upgrading " + serv + " to " + (newPow-9) + "TB");
 				upgradeServer(ns, serv, newPow);
 			} else {
-				ns.print("DEBUG: Not enough money to upgrade " + serv);
+				ns.print("DEBUG: Not enough money to upgrade " + serv + ". Required: " + ns.getPurchasedServerCost(Math.pow(2, newPow)));
 			}
 		}
 	}
