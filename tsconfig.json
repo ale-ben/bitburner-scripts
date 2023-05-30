@@ -15,7 +15,7 @@
     "sourceRoot": "http://localhost:8000/sources/",
     "strict": true,
     "rootDir": "src/",
-    "outDir": "sync/test/",
+    "outDir": "sync/test",
     "baseUrl": "src/",
     "paths": {
       "/*": [

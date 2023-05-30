@@ -2,7 +2,9 @@
 // https://github.com/bitburner-official/bitburner-scripts/blob/master/monitor.js
 const MONITORJS_REFRESH_INTERVAL = 1000 / 10; // 10 updates / s
 export async function main(ns) {
-    const flags = ns.flags([["help", false]]);
+    const flags = ns.flags([
+        ["help", false]
+    ]);
     if (flags._.length === 0 || flags.help) {
         ns.tprint("This script helps visualize the money and security of a server.");
         ns.tprint(`USAGE: run ${ns.getScriptName()} SERVER_NAME`);
@@ -33,9 +35,8 @@ export function logServerDetails(ns, server) {
     const growTime = ns.getGrowTime(server);
     const weakenTime = ns.getWeakenTime(server);
     let printString = `${server}:\n`;
-    printString += `Money: ${ns.nFormat(money, "$0.000a")} / ${ns.nFormat(maxMoney, "$0.000a")} (${((money / maxMoney) *
-        100).toFixed(2)}%)\n`;
-    printString += `security: +${(sec - minSec).toFixed(2)}\n\n`;
+    printString += `Money: ${ns.nFormat(money, "$0.000a")} / ${ns.nFormat(maxMoney, "$0.000a")} (${ ((money / maxMoney) * 100).toFixed(2)}%)\n`;
+    printString += `security: +${ (sec - minSec).toFixed(2)}\n\n`;
     const curMoneyHackingThreadsAmount = Math.ceil(ns.hackAnalyzeThreads(server, money));
     const hackAnalyzeResult = ns.hackAnalyze(server);
     const moneyPerHack = Math.floor(money * hackAnalyzeResult);
@@ -44,8 +45,6 @@ export function logServerDetails(ns, server) {
     const maxGrowthSecIncrease = ns.growthAnalyzeSecurity(growthThreadsAmount, server, 1);
     printString += `grow____: ${ns.tFormat(growTime)} (t=${growthThreadsAmount}),\nSec increase: ${maxGrowthSecIncrease}\n\n`;
     printString += `weaken__: ${ns.tFormat(weakenTime)} (t=${Math.ceil((sec - minSec) * 20)}) (tAfterGrowWeaken=${Math.ceil((sec + maxGrowthSecIncrease - minSec) * 20)})\n\n`;
-    printString += `Analytics:\n$ per thread: ${moneyPerHack} $\n$ per sec(Hack only) per thread: ${(moneyPerHack /
-        (ns.getHackTime(server) / 1000)).toFixed(2)}$\n$ per sec per thread(full cycle): ${(moneyPerHack /
-        (Math.max(weakenTime, hackTime, growTime) / 1000)).toFixed(2)}$\n`;
+    printString += `Analytics:\n$ per thread: ${moneyPerHack} $\n$ per sec(Hack only) per thread: ${ (moneyPerHack / (ns.getHackTime(server) / 1000)).toFixed(2)}$\n$ per sec per thread(full cycle): ${ (moneyPerHack / (Math.max(weakenTime, hackTime, growTime) / 1000)).toFixed(2)}$\n`;
     ns.print(printString);
 }

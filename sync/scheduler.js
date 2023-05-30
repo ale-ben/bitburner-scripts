@@ -26,13 +26,13 @@ export async function main(ns) {
 		{
 			name: "attack",
 			func: attack,
-			status: true,
+			status: false,
 			interval: 10 // in minutes
 		},
 		{
 			name: "manageNodes",
 			func: manageNodes,
-			status: true,
+			status: false,
 			interval: 5 // in minutes
 		},
 		{
@@ -44,7 +44,7 @@ export async function main(ns) {
 		{
 			name: "manageServers",
 			func: manageServers,
-			status: true,
+			status: false,
 			interval: 5 // in minutes
 		},
 	]

@@ -1,0 +1,45 @@
+/**
+ *
+ * @param ns
+ * @returns
+ */
+function mapNetwork(ns) {
+    const serversToCheck = ["home"];
+    const serversChecked = [];
+    const serversAvailable = [];
+    const serversUnavailable = {};
+    while (serversToCheck.length > 0) {
+        const serverToCheck = serversToCheck.pop();
+        if (!serverToCheck)
+            continue;
+        if (serversChecked.find((s) => s === serverToCheck))
+            continue;
+        serversChecked.push(serverToCheck);
+        if (ns.hasRootAccess(serverToCheck))
+            serversAvailable.push({ name: serverToCheck, ram: ns.getServerMaxRam(serverToCheck), money: ns.getServerMaxMoney(serverToCheck) });
+        else {
+            if (!serversUnavailable[ns.getServerNumPortsRequired(serverToCheck)])
+                serversUnavailable[ns.getServerNumPortsRequired(serverToCheck)] = [];
+            serversUnavailable[ns.getServerNumPortsRequired(serverToCheck)].push(serverToCheck);
+        }
+        const results = ns.scan(serverToCheck);
+        results.forEach((result) => {
+            if (!serversChecked.find((s) => s === result))
+                serversToCheck.push(result);
+        });
+    }
+    return { avail: serversAvailable, notAvail: serversUnavailable };
+}
+export function main(ns) {
+    ns.disableLog("ALL");
+    const availFile = "/data/availServers.txt";
+    const notAvailFile = "/data/unavailServers.txt";
+    const res = mapNetwork(ns);
+    const avail = res.avail;
+    const notAvail = res.notAvail;
+    ns.print("Available servers: " + JSON.stringify(avail));
+    ns.print("Unavailable servers: " + JSON.stringify(notAvail));
+    ns.write(availFile, JSON.stringify(avail), "w");
+    ns.write(notAvailFile, JSON.stringify(notAvail), "w");
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibWFwTmV0d29yay5qcyIsInNvdXJjZVJvb3QiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvc291cmNlcy8iLCJzb3VyY2VzIjpbImNvbXBsZXRlL3V0aWxzL21hcE5ldHdvcmsudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBWUE7Ozs7R0FJRztBQUNILFNBQVMsVUFBVSxDQUFDLEVBQU87SUFJMUIsTUFBTSxjQUFjLEdBQUcsQ0FBQyxNQUFNLENBQUMsQ0FBQztJQUNoQyxNQUFNLGNBQWMsR0FBYSxFQUFFLENBQUM7SUFDcEMsTUFBTSxnQkFBZ0IsR0FBa0IsRUFBRSxDQUFDO0lBQzNDLE1BQU0sa0JBQWtCLEdBQW1CLEVBQUUsQ0FBQztJQUU5QyxPQUFPLGNBQWMsQ0FBQyxNQUFNLEdBQUcsQ0FBQyxFQUFFO1FBQ2pDLE1BQU0sYUFBYSxHQUFHLGNBQWMsQ0FBQyxHQUFHLEVBQUUsQ0FBQztRQUMzQyxJQUFJLENBQUMsYUFBYTtZQUNqQixTQUFTO1FBQ1YsSUFBSSxjQUFjLENBQUMsSUFBSSxDQUFDLENBQUMsQ0FBQyxFQUFFLEVBQUUsQ0FBQyxDQUFDLEtBQUssYUFBYSxDQUFDO1lBQ2xELFNBQVM7UUFDVixjQUFjLENBQUMsSUFBSSxDQUFDLGFBQWEsQ0FBQyxDQUFDO1FBQ25DLElBQUksRUFBRSxDQUFDLGFBQWEsQ0FBQyxhQUFhLENBQUM7WUFDbEMsZ0JBQWdCLENBQUMsSUFBSSxDQUFDLEVBQUMsSUFBSSxFQUFFLGFBQWEsRUFBRSxHQUFHLEVBQUUsRUFBRSxDQUFDLGVBQWUsQ0FBQyxhQUFhLENBQUMsRUFBRSxLQUFLLEVBQUUsRUFBRSxDQUFDLGlCQUFpQixDQUFDLGFBQWEsQ0FBQyxFQUFDLENBQUMsQ0FBQzthQUM3SDtZQUNKLElBQUksQ0FBQyxrQkFBa0IsQ0FBQyxFQUFFLENBQUMseUJBQXlCLENBQUMsYUFBYSxDQUFDLENBQUM7Z0JBQ25FLGtCQUFrQixDQUFDLEVBQUUsQ0FBQyx5QkFBeUIsQ0FBQyxhQUFhLENBQUMsQ0FBQyxHQUFHLEVBQUUsQ0FBQztZQUN0RSxrQkFBa0IsQ0FBQyxFQUFFLENBQUMseUJBQXlCLENBQUMsYUFBYSxDQUFDLENBQUMsQ0FBQyxJQUFJLENBQUMsYUFBYSxDQUFDLENBQUM7U0FDcEY7UUFFRCxNQUFNLE9BQU8sR0FBRyxFQUFFLENBQUMsSUFBSSxDQUFDLGFBQWEsQ0FBQyxDQUFDO1FBRXZDLE9BQU8sQ0FBQyxPQUFPLENBQUMsQ0FBQyxNQUFNLEVBQUUsRUFBRTtZQUMxQixJQUFJLENBQUMsY0FBYyxDQUFDLElBQUksQ0FBQyxDQUFDLENBQUMsRUFBRSxFQUFFLENBQUMsQ0FBQyxLQUFLLE1BQU0sQ0FBQztnQkFDNUMsY0FBYyxDQUFDLElBQUksQ0FBQyxNQUFNLENBQUMsQ0FBQztRQUM3QixDQUFDLENBQ0QsQ0FBQztLQUNGO0lBQ0QsT0FBTyxFQUFDLEtBQUssRUFBRSxnQkFBZ0IsRUFBRSxRQUFRLEVBQUUsa0JBQWtCLEVBQUMsQ0FBQztBQUNoRSxDQUFDO0FBRUQsTUFBTSxVQUFVLElBQUksQ0FBQyxFQUFPO0lBQzNCLEVBQUUsQ0FBQyxVQUFVLENBQUMsS0FBSyxDQUFDLENBQUM7SUFDckIsTUFBTSxTQUFTLEdBQUcsd0JBQXdCLENBQUM7SUFDM0MsTUFBTSxZQUFZLEdBQUcsMEJBQTBCLENBQUM7SUFFaEQsTUFBTSxHQUFHLEdBQUcsVUFBVSxDQUFDLEVBQUUsQ0FBQyxDQUFDO0lBQzNCLE1BQU0sS0FBSyxHQUFHLEdBQUcsQ0FBQyxLQUFLLENBQUM7SUFDeEIsTUFBTSxRQUFRLEdBQUcsR0FBRyxDQUFDLFFBQVEsQ0FBQztJQUM5QixFQUFFLENBQUMsS0FBSyxDQUFDLHFCQUFxQixHQUFHLElBQUksQ0FBQyxTQUFTLENBQUMsS0FBSyxDQUFDLENBQUMsQ0FBQztJQUN4RCxFQUFFLENBQUMsS0FBSyxDQUFDLHVCQUF1QixHQUFHLElBQUksQ0FBQyxTQUFTLENBQUMsUUFBUSxDQUFDLENBQUMsQ0FBQztJQUU3RCxFQUFFLENBQUMsS0FBSyxDQUFDLFNBQVMsRUFBRSxJQUFJLENBQUMsU0FBUyxDQUFDLEtBQUssQ0FBQyxFQUFFLEdBQUcsQ0FBQyxDQUFDO0lBQ2hELEVBQUUsQ0FBQyxLQUFLLENBQUMsWUFBWSxFQUFFLElBQUksQ0FBQyxTQUFTLENBQUMsUUFBUSxDQUFDLEVBQUUsR0FBRyxDQUFDLENBQUM7QUFDdkQsQ0FBQyJ9
