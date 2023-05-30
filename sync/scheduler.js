@@ -3,7 +3,7 @@ async function attack(ns) {
 }
 
 async function manageNodes(ns) {
-	ns.run("/bin/manageHacknetNodes.js");
+	ns.run("/bin/manager/manageHacknetNodes.js");
 }
 
 async function harvest(ns){
@@ -11,7 +11,7 @@ async function harvest(ns){
 }
 
 async function manageServers(ns){
-	ns.run("/bin/manageServers.js");
+	ns.run("/bin/manager/manageServers.js");
 }
 
 export async function main(ns) {

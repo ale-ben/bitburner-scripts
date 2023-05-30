@@ -9,7 +9,7 @@ export async function main(ns) {
 
 	// Servers in this list will be ignored
 	const serverBlacklist = ["home"];
-	const fileList = ["/bin/attackNeighbours.js", "/bin/propagateToNeighbours.js"];
+	const fileList = ["/bin/old/attackNeighbours.js", "/bin/old/propagateToNeighbours.js"];
 	const localhost = ns.getHostname();
 
 	let servers = ns.scan();

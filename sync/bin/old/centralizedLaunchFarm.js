@@ -28,10 +28,10 @@ async function harvest(ns, host) {
 	const maxRam = ns.getServerMaxRam(host);
 	const nThreads = Math.trunc(maxRam / 2.4); //TODO: Update ram cost if farmLocalhost gets modified
 	if (nThreads > 0) {
-		const fileList = ["/bin/farmLocalhost.js"];
+		const fileList = ["/bin/old/farmLocalhost.js"];
 		await ns.scp(fileList, host);
 		ns.print("Launching farm on " + host + " with " + nThreads + " threads.")
-		await ns.exec("/bin/farmLocalhost.js", host, nThreads, host)
+		await ns.exec("/bin/old/farmLocalhost.js", host, nThreads, host)
 	} else ns.print("Not enough ram to launch farm on " + host);
 	
 }
