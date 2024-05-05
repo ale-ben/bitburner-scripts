@@ -1,14 +1,14 @@
 [
 	{
 		"name": "Manage hacknet nodes",
-		"path":"/bin/sysManager/manageHacknetNodes.ts",
+		"path":"/bin/sysManager/manageHacknetNodes.js",
 		"interval": 5,
 		"status": true
 	},
 	{
 		"name": "Manage servers",
-		"path":"/bin/sysManager/manageServers.ts",
+		"path":"/bin/sysManager/manageServers.js",
 		"interval": 5,
-		"status": true
+		"status": false
 	}
 ]
