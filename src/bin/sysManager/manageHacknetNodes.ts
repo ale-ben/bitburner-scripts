@@ -3,7 +3,7 @@ import { Hacknet, NS } from '@ns';
 const config = {
 	nodes: 16,
 	level: {
-		req: 100,
+		req: 150,
 		block: 5,
 	},
 	ram: {

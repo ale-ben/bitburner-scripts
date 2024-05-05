@@ -10,5 +10,11 @@
 		"path":"/bin/sysManager/manageServers.js",
 		"interval": 5,
 		"status": false
+	},
+	{
+		"name": "Attack new hosts",
+		"path":"/bin/sysManager/attack.js",
+		"interval": 10,
+		"status": true
 	}
 ]
