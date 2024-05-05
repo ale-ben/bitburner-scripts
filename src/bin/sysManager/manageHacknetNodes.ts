@@ -23,8 +23,8 @@ export async function main(ns: NS): Promise<void> {
 	if (nodesUpgrade(ns)) {
 		// Required config has been reached
 		ns.tail();
-		ns.print("INFO: Hacknet nodes upgrade complete. Please edit config or disable script scheduling.");
-		ns.tprint("INFO: Hacknet nodes upgrade complete. Please edit config or disable script scheduling.");
+		ns.print('INFO: Hacknet nodes upgrade complete. Please edit config or disable script scheduling.');
+		ns.tprint('INFO: Hacknet nodes upgrade complete. Please edit config or disable script scheduling.');
 	}
 	return;
 }
@@ -53,6 +53,9 @@ function nodesUpgrade(ns: NS): boolean {
 			ns.print('Not enough money to purchase node. Needed ' + (cost - getBalance(ns)) + '. Skipping...');
 			break;
 		}
+
+		const res = hacknet.purchaseNode();
+		ns.print('Purchased hacknet Node with index ' + res);
 	}
 
 	for (let i = 0; i < hacknet.numNodes(); i++) {
@@ -105,7 +108,7 @@ function nodesUpgrade(ns: NS): boolean {
 			}
 
 			hacknet.upgradeRam(i, config.ram.block);
-			ns.print("Upgrading RAM on node " + i + " to level " + hacknet.getNodeStats(i).ram);
+			ns.print('Upgrading RAM on node ' + i + ' to level ' + hacknet.getNodeStats(i).ram);
 		}
 
 		while (hacknet.getNodeStats(i).cores < config.cores.req) {
@@ -127,7 +130,7 @@ function nodesUpgrade(ns: NS): boolean {
 			}
 
 			hacknet.upgradeCore(i, config.cores.block);
-			ns.print("Upgrading cores on node " + i + " to " + hacknet.getNodeStats(i).cores);
+			ns.print('Upgrading cores on node ' + i + ' to ' + hacknet.getNodeStats(i).cores);
 		}
 	}
 
