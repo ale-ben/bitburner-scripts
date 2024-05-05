@@ -8,7 +8,6 @@
 		"bitburner.fileWatcher.enable": true,
 		"bitburner.showFileWatcherEnabledNotification": true,
 		"bitburner.showPushSuccessNotification": true,
-		"bitburner.scriptRoot": "./sync",
-		"bitburner.authToken": "N+TGhOv4c9nisbsYDep1SdQGtUI78eqSNg3c2i71+ZwjGJjppXdAJw//CKWwHz8A"
+		"bitburner.scriptRoot": "./sync"
 	}
 }
