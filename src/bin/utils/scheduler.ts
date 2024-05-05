@@ -19,13 +19,13 @@ export async function main(ns: NS) {
 	let counter = 0; // Passed minutes since start (or rollover)
 
 	while (true) {
-
 		if (counter % 5 == 0) {
 			// Every 5 minutes, reload the schedule
-			ns.print("DEBUG: Reloading schedule");
+			ns.print('DEBUG: Reloading schedule');
 			const newSched = loadSchedule(ns);
 			schedule = mergeSchedules(schedule, newSched);
-			ns.print("INFO: Schedule updated")
+			ns.print(schedule);
+			ns.print('INFO: Schedule updated');
 		}
 
 		for (const el of schedule) {
@@ -34,15 +34,20 @@ export async function main(ns: NS) {
 				ns.print('INFO: Running ' + el.name);
 
 				// Rollover for counter > 24 hours
-				if (counter >= 60 * 24) el.lastRun = 0;
-				else el.lastRun = counter;
+				if (counter >= 60 * 24) {
+					el.lastRun = 0;
+					ns.print('DEBUG: LastRun rollback');
+				} else el.lastRun = counter;
 
 				ns.run(el.path);
 			}
 		}
 
 		counter++;
-		if (counter >= 60 * 24) counter = 0; // If counter goes over 24 hours, rollover to 0
+		if (counter >= 60 * 24) {
+			counter = 0;
+			ns.print('DEBUG: Counter rollback');
+		} // If counter goes over 24 hours, rollover to 0
 
 		await ns.sleep(1000 * 60); // Sleep 1 minute
 	}
@@ -129,16 +134,16 @@ function parseScheduleString(ns: NS, scheduleStr: string) {
 
 /**
  * Merges multiple schedules preserving lastRun from baseEl
- * @param baseEl 
- * @param newEl 
- * @returns 
+ * @param baseEl
+ * @param newEl
+ * @returns
  */
 function mergeSchedules(baseEl: scheduleElement[], newEl: scheduleElement[]): scheduleElement[] {
 	const returnEl = baseEl;
 
 	for (const el of newEl) {
-		const base = returnEl.findIndex(elem => {
-			elem.name === el.name
+		const base = returnEl.findIndex((elem) => {
+			return elem.name === el.name;
 		});
 
 		if (base === -1) {
@@ -151,7 +156,7 @@ function mergeSchedules(baseEl: scheduleElement[], newEl: scheduleElement[]): sc
 		const lastRun = returnEl[base].lastRun;
 		returnEl[base] = {
 			lastRun,
-			...el
+			...el,
 		};
 	}
 
@@ -160,8 +165,8 @@ function mergeSchedules(baseEl: scheduleElement[], newEl: scheduleElement[]): sc
 
 /**
  * Load a schedule from file
- * @param ns 
- * @returns 
+ * @param ns
+ * @returns
  */
 function loadSchedule(ns: NS): scheduleElement[] {
 	const scheduleStr = ns.read('/config/schedulerData.txt');

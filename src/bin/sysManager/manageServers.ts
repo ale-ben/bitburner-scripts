@@ -4,9 +4,9 @@ import { NS } from '@ns';
  * If limitsare set to 0, hard limits are used (getPurchasedServerLimit and getPurchasedServerMaxRam)
  */
 const config = {
-	maxServer: 4, // Number of servers
-	minRamExp: 6, // Minimum ram exponent to buy a server
-	maxRamExp: 10, // Max ram exponent to buy a server
+	maxServer: 0, // Number of servers
+	minRamExp: 10, // Minimum ram exponent to buy a server
+	maxRamExp: 0, // Max ram exponent to buy a server
 	prefix: 'pserv', // Prefix for all servers
 };
 

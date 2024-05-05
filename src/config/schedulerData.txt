@@ -9,7 +9,7 @@
 		"name": "Manage servers",
 		"path":"/bin/sysManager/manageServers.js",
 		"interval": 5,
-		"status": false
+		"status": true
 	},
 	{
 		"name": "Attack new hosts",
