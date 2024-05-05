@@ -4,5 +4,7 @@
   "singleQuote": true,
   "trailingComma": "all",
   "proseWrap": "never",
-  "endOfLine": "auto"
+  "endOfLine": "auto",
+  "tabWidth": 4,
+  "useTabs": true
 }
