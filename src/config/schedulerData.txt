@@ -1,0 +1,14 @@
+[
+	{
+		"name": "Manage hacknet nodes",
+		"path":"/bin/sysManager/manageHacknetNodes.ts",
+		"interval": 5,
+		"status": true
+	},
+	{
+		"name": "Manage servers",
+		"path":"/bin/sysManager/manageServers.ts",
+		"interval": 5,
+		"status": true
+	}
+]
