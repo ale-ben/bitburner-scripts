@@ -60,7 +60,7 @@ export async function main(ns: NS) {
 
 	// Base parameters
 	const weakenPerThread = ns.weakenAnalyze(1, 1);
-	const hackThreadReduce = 1;
+	const hackThreadReduce = 8;
 	const threadDelay = 150; // Ms delay between threads
 
 	let delay = 0.01;
@@ -73,6 +73,11 @@ export async function main(ns: NS) {
 
 	// Create servers
 	const servers = getServerProfiles(ns);
+	servers.push({
+		hostname: "home",
+		availRam: 256,
+		scheduled: []
+	});
 	ns.print('INFO: generated server profiles for ' + servers.length + ' servers.');
 
 	while (true) {
@@ -88,7 +93,7 @@ export async function main(ns: NS) {
 
 		const sleepTime = 5; // Sleep 5 seconds
 		await ns.sleep(1000 * sleepTime);
-		delay = Math.max(delay - 1000 * sleepTime, 0);
+		delay = Math.max(delay - 1000 * sleepTime, 0.01);
 	}
 
 	return;
