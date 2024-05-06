@@ -4,9 +4,9 @@ import { NS } from '@ns';
  * If limitsare set to 0, hard limits are used (getPurchasedServerLimit and getPurchasedServerMaxRam)
  */
 const config = {
-	maxServer: 0, // Number of servers
+	maxServer: 1, // Number of servers
 	minRamExp: 10, // Minimum ram exponent to buy a server
-	maxRamExp: 0, // Max ram exponent to buy a server
+	maxRamExp: 12, // Max ram exponent to buy a server
 	prefix: 'pserv', // Prefix for all servers
 };
 
@@ -40,7 +40,7 @@ function getBalance(ns: NS): number {
  */
 function upgradeServer(ns: NS, hostname: string, ramExp: number) {
 	const ram = Math.pow(2, ramExp);
-	ns.print('INFO: Upgrading ' + hostname + ' to ' + (ram > 1024 ? Math.floor(ram / 1024) + 'TB' : ram + 'GB'));
+	ns.print('INFO: Upgrading ' + hostname + ' to ' + ns.formatRam(ram));
 	ns.killall(hostname);
 	ns.deleteServer(hostname);
 	ns.purchaseServer(hostname, ram);
@@ -82,7 +82,9 @@ function manageServers(ns: NS): boolean {
 		if (getBalance(ns) < cost) {
 			// Not enough money to buy server
 			upgradesCompleted = false;
-			ns.print('DEBUG: Not enough money to purchase server. Needed ' + (cost - getBalance(ns)) + '. Skipping...');
+			ns.print(
+				'DEBUG: Not enough money to purchase server. NMissingeeded ' + ns.formatNumber(cost - getBalance(ns)),
+			);
 			break;
 		}
 
@@ -108,8 +110,10 @@ function manageServers(ns: NS): boolean {
 			ns.print(
 				'DEBUG: Not enough money to upgrade ' +
 					serv +
-					'. Required: ' +
-					ns.getPurchasedServerCost(Math.pow(2, availRamExp + 1)),
+					' to ' +
+					ns.formatRam(Math.pow(2, upgradableRam + 1)) +
+					'. Missing: ' +
+					ns.formatNumber(ns.getPurchasedServerCost(Math.pow(2, availRamExp + 1)) - getBalance(ns)),
 			);
 			continue;
 		}

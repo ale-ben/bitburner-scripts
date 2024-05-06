@@ -3,7 +3,7 @@
 		"name": "Manage hacknet nodes",
 		"path":"/bin/sysManager/manageHacknetNodes.js",
 		"interval": 5,
-		"status": false
+		"status": true
 	},
 	{
 		"name": "Manage servers",

@@ -50,7 +50,9 @@ function nodesUpgrade(ns: NS): boolean {
 		if (cost > getBalance(ns)) {
 			// Not enough money to buy nodes
 			upgradesCompleted = false;
-			ns.print('Not enough money to purchase node. Needed ' + (cost - getBalance(ns)) + '. Skipping...');
+			ns.print(
+				'Not enough money to purchase node. Needed ' + ns.formatNumber(cost - getBalance(ns)) + '. Skipping...',
+			);
 			break;
 		}
 
@@ -78,7 +80,7 @@ function nodesUpgrade(ns: NS): boolean {
 					'Not enough money to upgrade level on node ' +
 						i +
 						'. Needed ' +
-						(cost - getBalance(ns)) +
+						ns.formatNumber(cost - getBalance(ns)) +
 						'. Skipping...',
 				);
 				upgradesCompleted = false;
@@ -100,7 +102,7 @@ function nodesUpgrade(ns: NS): boolean {
 					'Not enough money to upgrade ram on node ' +
 						i +
 						'. Needed ' +
-						(cost - getBalance(ns)) +
+						ns.formatNumber(cost - getBalance(ns)) +
 						'. Skipping...',
 				);
 				upgradesCompleted = false;
@@ -122,7 +124,7 @@ function nodesUpgrade(ns: NS): boolean {
 					'Not enough money to upgrade cores on node ' +
 						i +
 						'. Needed ' +
-						(cost - getBalance(ns)) +
+						ns.formatNumber(cost - getBalance(ns)) +
 						'. Skipping...',
 				);
 				upgradesCompleted = false;
