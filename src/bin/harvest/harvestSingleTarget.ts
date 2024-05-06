@@ -73,7 +73,7 @@ export async function main(ns: NS) {
 
 	// Create servers
 	const servers = getServerProfiles(ns);
-	ns.print('INFO: generated server profiles for ' + servers.length + " servers.");
+	ns.print('INFO: generated server profiles for ' + servers.length + ' servers.');
 
 	while (true) {
 		// Try to schedule repeatedly
