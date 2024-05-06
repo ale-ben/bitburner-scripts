@@ -28,7 +28,7 @@ interface ScriptProfile {
 }
 
 interface ScheduleEvent {
-	target: string;
+	target: TargetProfile;
 	script: ScriptProfile;
 	threads: number;
 	delay: number;
@@ -56,7 +56,13 @@ const scripts = {
 };
 
 export async function main(ns: NS) {
-	ns.disableLog('ALL');
+	ns.disableLog('exec');
+	ns.disableLog('getServerMaxRam');
+	ns.disableLog('getServerUsedRam');
+	ns.disableLog('getServerMaxMoney');
+	ns.disableLog('getServerMoneyAvailable');
+	ns.disableLog('getServerMinSecurityLevel');
+	ns.disableLog('getServerSecurityLevel');
 
 	// Base parameters
 	const weakenPerThread = ns.weakenAnalyze(1, 1);
@@ -268,25 +274,25 @@ function getServerProfiles(ns: NS): ServerProfile[] {
 function scheduleTarget(ns: NS, servers: ServerProfile[], target: TargetProfile, baseDelay: number): boolean {
 	const toSchedule: ScheduleEvent[] = [
 		{
-			target: target.hostname,
+			target,
 			script: scripts.weaken,
 			threads: target.weakenHack.threads,
 			delay: baseDelay + target.weakenHack.delay,
 		},
 		{
-			target: target.hostname,
+			target,
 			script: scripts.weaken,
 			threads: target.weakenGrow.threads,
 			delay: baseDelay + target.weakenGrow.delay,
 		},
 		{
-			target: target.hostname,
+			target,
 			script: scripts.grow,
 			threads: target.grow.threads,
 			delay: baseDelay + target.grow.delay,
 		},
 		{
-			target: target.hostname,
+			target,
 			script: scripts.hack,
 			threads: target.hack.threads,
 			delay: baseDelay + target.hack.delay,
@@ -369,7 +375,7 @@ function deploySchedule(ns: NS, servers: ServerProfile[]) {
 				sched.script.path,
 				server.hostname,
 				sched.threads,
-				sched.target,
+				sched.target.hostname,
 				sched.delay,
 				serverIndex + '-' + i++,
 			);

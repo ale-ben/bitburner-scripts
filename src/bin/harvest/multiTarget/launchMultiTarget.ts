@@ -4,7 +4,7 @@ import { NS } from "@ns";
 export async function main(ns: NS) {
 	// Launch the prepare script
 	ns.print("INFO: Spawning prepare script");
-	const res = ns.run("/dev/prepareMultiTarget.js");
+	const res = ns.run("/bin/harvest/multiTarget/prepareMultiTarget.js");
 	if (res === 0) {
 		ns.print("ERROR: Unable to spawn prepare script.");
 		ns.tprint("ERROR: Unable to spawn prepare script.");
@@ -16,7 +16,7 @@ export async function main(ns: NS) {
 
 	// Launch the harvest script
 	ns.print("INFO: Spawning harvest script");
-	const res1 = ns.run("/dev/harvestMultiTarget.js");
+	const res1 = ns.run("/bin/harvest/multiTarget/harvestMultiTarget.js");
 	if (res1 === 0) {
 		ns.print("ERROR: Unable to spawn harvest script.");
 		ns.tprint("ERROR: Unable to spawn harvest script.");

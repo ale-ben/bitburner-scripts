@@ -78,6 +78,32 @@ export async function main(ns: NS) {
 		availRam: 256,
 		scheduled: []
 	});
+	// servers.push({
+	// 	hostname: "silver-helix",
+	// 	availRam: 64,
+	// 	scheduled: []
+	// });
+	// servers.push({
+	// 	hostname: "catalyst",
+	// 	availRam: 128,
+	// 	scheduled: []
+	// });
+	// servers.push({
+	// 	hostname: "netlink",
+	// 	availRam: 128,
+	// 	scheduled: []
+	// });
+	// servers.push({
+	// 	hostname: "I.I.I.I",
+	// 	availRam: 64,
+	// 	scheduled: []
+	// });
+	// servers.push({
+	// 	hostname: "avmnite-02h",
+	// 	availRam: 64,
+	// 	scheduled: []
+	// });
+	
 	ns.print('INFO: generated server profiles for ' + servers.length + ' servers.');
 
 	while (true) {
@@ -91,7 +117,7 @@ export async function main(ns: NS) {
 		// Launch attack
 		deploySchedule(ns, servers);
 
-		const sleepTime = 5; // Sleep 5 seconds
+		const sleepTime = 3; // Sleep 5 seconds
 		await ns.sleep(1000 * sleepTime);
 		delay = Math.max(delay - 1000 * sleepTime, 0.01);
 	}

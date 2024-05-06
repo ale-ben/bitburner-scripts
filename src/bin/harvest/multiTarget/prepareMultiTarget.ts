@@ -1,13 +1,21 @@
 import { NS } from '@ns';
 
 export async function main(ns: NS) {
-	ns.disableLog('ALL');
+	ns.disableLog('exec');
+	ns.disableLog('getServerMaxRam');
+	ns.disableLog('getServerUsedRam');
+	ns.disableLog('getServerMaxMoney');
+	ns.disableLog('getServerMoneyAvailable');
+	ns.disableLog('getServerMinSecurityLevel');
+	ns.disableLog('getServerSecurityLevel');
 
-	const targets = ['joesguns', 'phantasy', 'galactic-cyber'];
+	const targets = ['joesguns', 'phantasy', 'galactic-cyber'].filter(el => ns.hasRootAccess(el));
 
 	const servers = ns.getPurchasedServers();
 
 	servers.forEach((server) => syncScripts(ns, server, false));
+
+	let pidList: number[] = [];
 
 	ns.print("INFO: Starting grow cycle");
 	for (const target of targets) {
@@ -15,8 +23,18 @@ export async function main(ns: NS) {
 		const currMoney = ns.getServerMoneyAvailable(target);
 		const maxMoney = ns.getServerMaxMoney(target);
 
-		if (currMoney !== maxMoney) await grow(ns, servers, target);
+		if (currMoney !== maxMoney) pidList.push(await grow(ns, servers, target));
 	}
+
+	ns.print("INFO: Waiting for grow threads to finish");
+	for (const pid of pidList.filter(pid => pid !== 0)) {
+		ns.print("DEBUG: Waiting for pid " + pid);
+		while (ns.isRunning(pid)) {
+			await ns.sleep(1000*5);
+		}
+	}
+
+	pidList = [];
 
 	ns.print("INFO: Starting weaken cycle");
 	for (const target of targets) {
@@ -24,8 +42,18 @@ export async function main(ns: NS) {
 		const currSec = ns.getServerSecurityLevel(target);
 		const minSec = ns.getServerMinSecurityLevel(target);
 
-		if (currSec !== minSec) await weaken(ns, servers, target);
+		if (currSec !== minSec) pidList.push(await weaken(ns, servers, target));
 	}
+
+	ns.print("INFO: Waiting for weaken threads to finish");
+	for (const pid of pidList.filter(pid => pid !== 0)) {
+		ns.print("DEBUG: Waiting for pid " + pid);
+		while (ns.isRunning(pid)) {
+			await ns.sleep(1000*5);
+		}
+	}
+
+	ns.print("INFO: Prepare complete");
 
 	return;
 }
@@ -42,7 +70,7 @@ function syncScripts(ns: NS, host: string, override: boolean) {
 	}
 }
 
-async function grow(ns: NS, servers: string[], target: string): Promise<void> {
+async function grow(ns: NS, servers: string[], target: string): Promise<number> {
 	let currMoney = ns.getServerMoneyAvailable(target);
 	const maxMoney = ns.getServerMaxMoney(target);
 
@@ -74,7 +102,7 @@ async function grow(ns: NS, servers: string[], target: string): Promise<void> {
 
 		if (divisor === 1) {
 			ns.print("INFO: Launched grow on a single server for " + target + ". Monitoring should not be needed");
-			return;
+			return res;
 		} else {
 			ns.print("DEBUG: Launched grow on multiple servers for " + target + ". Monitoring is needed");
 		}
@@ -85,10 +113,10 @@ async function grow(ns: NS, servers: string[], target: string): Promise<void> {
 
 		currMoney = ns.getServerMoneyAvailable(target);
 	}
-	return;
+	return 0;
 }
 
-async function weaken(ns: NS, servers: string[], target: string): Promise<void> {
+async function weaken(ns: NS, servers: string[], target: string): Promise<number> {
 	const weakenPerThread = ns.weakenAnalyze(1, 1);
 
 	let currSec = ns.getServerSecurityLevel(target);
@@ -122,7 +150,7 @@ async function weaken(ns: NS, servers: string[], target: string): Promise<void> 
 
 		if (divisor === 1) {
 			ns.print("INFO: Launched weaken on a single server for " + target + ". Monitoring should not be needed");
-			return;
+			return res;
 		} else {
 			ns.print("DEBUG: Launched weaken on multiple servers for " + target + ". Monitoring is needed");
 		}
@@ -133,5 +161,5 @@ async function weaken(ns: NS, servers: string[], target: string): Promise<void> 
 
 		currSec = ns.getServerSecurityLevel(target);
 	}
-	return;
+	return 0;
 }
