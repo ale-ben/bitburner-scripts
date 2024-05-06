@@ -60,7 +60,7 @@ export async function main(ns: NS) {
 
 	// Base parameters
 	const weakenPerThread = ns.weakenAnalyze(1, 1);
-	const hackThreadReduce = 4;
+	const hackThreadReduce = 1;
 	const threadDelay = 150; // Ms delay between threads
 
 	let delay = 0.01;
@@ -73,17 +73,23 @@ export async function main(ns: NS) {
 
 	// Create servers
 	const servers = getServerProfiles(ns);
-	ns.print('DEBUG: generated server profiles ' + JSON.stringify(servers));
+	ns.print('INFO: generated server profiles for ' + servers.length + " servers.");
 
-	// Try to schedule repeatedly
-	while (scheduleTarget(ns, servers, targetProfile, delay)) {
-		delay += 4 * threadDelay;
+	while (true) {
+		// Try to schedule repeatedly
+		while (scheduleTarget(ns, servers, targetProfile, delay)) {
+			delay += 4 * threadDelay;
+		}
+
+		ns.print('INFO: Generated ' + servers.reduce((acc, el) => el.scheduled.length + acc, 0) + ' events.');
+
+		// Launch attack
+		deploySchedule(ns, servers);
+
+		const sleepTime = 5; // Sleep 5 seconds
+		await ns.sleep(1000 * sleepTime);
+		delay = Math.max(delay - 1000 * sleepTime, 0);
 	}
-
-	ns.print('DEBUG: Generated schedule: ' + JSON.stringify(servers));
-
-	// Launch attack
-	deploySchedule(ns, servers);
 
 	return;
 }
