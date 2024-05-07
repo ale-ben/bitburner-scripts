@@ -10,17 +10,17 @@ export async function main(ns: NS): Promise<void> {
 		throw new Error('Hostname must be a string.');
 	}
 
-	const res = dfsScan(ns, hostname, "home", "");
+	const res = dfsScan(ns, hostname, 'home', '');
 	printResults(ns, res);
 }
 
 /**
  * Scan in dfs the node tree
- * @param ns 
- * @param target 
- * @param node 
- * @param parent 
- * @returns 
+ * @param ns
+ * @param target
+ * @param node
+ * @param parent
+ * @returns
  */
 function dfsScan(ns: NS, target: string, node: string, parent: string): string[] {
 	if (node.toLowerCase() === target.toLowerCase()) {
@@ -45,5 +45,5 @@ function dfsScan(ns: NS, target: string, node: string, parent: string): string[]
 }
 
 function printResults(ns: NS, res: string[]) {
-	ns.tprint(res.reverse().join(" -> "));
+	ns.tprint(res.reverse().join(' -> '));
 }
